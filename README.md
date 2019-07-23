@@ -10,11 +10,11 @@ This container requires some environmental variables and a private key mounted a
 
 ### Env vars
 
-`TUNNEL_HOST` is the domain or IP of the server that you want to tunnel through.
-`TUNNEL_USERNAME` is the ssh user which will be used to connect to the host
-`REMOTE_HOST` is the tunnel endpoint after it comes out through TUNNEL\_HOST. This will be 127.0.0.1 if you want to connect to the TUNNEL_HOST itself.
-`LOCAL_PORT` is the local port inside this container
-`REMOTE_PORT` is the port to connect to on the other end of the tunnel.
+* `TUNNEL_HOST` is the domain or IP of the server that you want to tunnel through.
+* `TUNNEL_USERNAME` is the ssh user which will be used to connect to the host
+* `REMOTE_HOST` is the tunnel endpoint after it comes out through TUNNEL\_HOST. This will be 127.0.0.1 if you want to connect to the TUNNEL_HOST itself.
+* `LOCAL_PORT` is the local port inside this container
+* `REMOTE_PORT` is the port to connect to on the other end of the tunnel.
 
 ### Private Key
 The private key should be mounted into `/root/ssh/`.
