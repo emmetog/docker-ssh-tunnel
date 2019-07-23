@@ -6,40 +6,36 @@ This Docker creates a simple SSH tunnel over a server. It is very useful when yo
 
 ## Usage
 
-1. First you should create a config file in your local directory. For simplicity you can create this file in `~/.ssh` in your local machine.
+This container requires some environmental variables and a private key mounted as a volume.
 
-2. Inside `~/.ssh/config` put these lines:
+### Env vars
 
-```
-    Host mysql-tunnel # You can use any name
-            HostName ssh-tunnel.corporate.tld # Tunnel 
-            IdentityFile ~/.ssh/id_rsa # Private key location
-            User cagatay.guertuerk # Username to connect to SSH service
-            ForwardAgent yes
-            TCPKeepAlive yes
-            ConnectTimeout 5
-            ServerAliveCountMax 10
-            ServerAliveInterval 15
-```
+`TUNNEL_HOST` is the domain or IP of the server that you want to tunnel through.
+`TUNNEL_USERNAME` is the ssh user which will be used to connect to the host
+`REMOTE_HOST` is the tunnel endpoint after it comes out through TUNNEL\_HOST. This will be 127.0.0.1 if you want to connect to the TUNNEL_HOST itself.
+`LOCAL_PORT` is the local port inside this container
+`REMOTE_PORT` is the port to connect to on the other end of the tunnel.
 
-3. Don't forget to put your private key (`id_rsa`) to `~/.ssh` folder.
+### Private Key
+The private key should be mounted into `/root/ssh/`.
 
-4. Now in `docker-compose.yml` you can define the tunnel as follows:
+### Example docker-compose.yml
 
 ```
     version: '2'
     services:
       mysql:
-        image: cagataygurturk/docker-ssh-tunnel:0.0.1
+        image: cagataygurturk/docker-ssh-tunnel:latest
         volumes:
-          - $HOME/.ssh:/root/ssh:ro
+          - $HOME/.ssh/id_rsa:/root/ssh/id_rsa:ro
         environment:
-          TUNNEL_HOST: mysql-tunnel
-          REMOTE_HOST: tunneled-sql.corporate.internal.tld
+          TUNNEL_HOST: <IP>
+          TUNNEL_USERNAME: me
+          REMOTE_HOST: 127.0.0.1
           LOCAL_PORT: 3306
           REMOTE_PORT: 3306
 ```
 
-5. Run `docker-compose up -d`
+Run `docker-compose up -d`
 
-After you start up docker containers, any container in the same network will be able to access to tunneled mysql instance using ```tcp://mysql:3306```. Of course you can also expose port 3306 to be able to access to tunneled resource from your host machine.
+After you start up docker containers, any container in the same network will be able to access to tunneled mysql instance using ```tcp://<container-name>:3306```. Of course you can also expose port 3306 on the host to be able to access to tunneled resource from your host machine.

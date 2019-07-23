@@ -1,0 +1,12 @@
+version: '2'
+services:
+  mysql:
+    build: .
+    volumes:
+      - $HOME/.ssh/id_rsa:/root/ssh/id_rsa:ro
+    environment:
+      TUNNEL_HOST: 51.179.204.241
+      TUNNEL_USERNAME: "emmet"
+      REMOTE_HOST: 127.0.0.1
+      LOCAL_PORT: 5432
+      REMOTE_PORT: 5432
